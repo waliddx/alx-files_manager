@@ -1,0 +1,20 @@
+const { MongoClient } = require('mongodb');
+
+async function checkMongoVersion() {
+  const url = 'mongodb://localhost:27017';
+  const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
+
+  try {
+    await client.connect();
+    const adminDb = client.db().admin();
+    const info = await adminDb.serverStatus();
+    console.log('MongoDB version:', info.version);
+  } catch (err) {
+    console.error('Error connecting to MongoDB:', err);
+  } finally {
+    await client.close();
+  }
+}
+
+checkMongoVersion();
+
